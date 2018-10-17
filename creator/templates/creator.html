@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+<div class="block-31" style="position: relative;">
+  <div class="owl-carousel loop-block-31 ">
+    <div class="block-30 item" style="background-image: url('{% static 'images/bg_1.jpg' %}');"
+      data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <h2 class="heading">Every student can learn, just not on the same day, or the same way.</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<br>
+
+
+
+<div class="container" id="setbuttons">
+  <button class="btn btn-success" data-toggle="modal" data-target="#addcourse">Add Course</button>
+</div>
+
+
+<br>
+
+<div id="loading" style="display:none;" class="container text-center">
+  <img src="{% static 'images/Preloader_3.gif' %}">
+  <br><br><br>
+</div>
+
+
+
+<div class="container" id="showtable">
+  <table class="grid table table-striped table-dark table-hover" title="Ordinary Table">
+    <thead>
+      <tr>
+        <th>Course Title</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for k in keys.all %}
+
+
+      <td>
+        {{k.title}}
+      </td>
+      <td>
+        <button class="btn btn-success" onclick="capmodal({{ k.ids }})" data-toggle="modal" data-target="#topicdesc">View</button>
+        <input id="{{ k.ids }}" hidden=true value="{{ k.desc }}" />
+      </td>
+      <td>
+
+        <button class="btn btn-success" onclick="knowtopics({{ k.ids }})" type="submit" name="goto">Know More</button>
+
+      </td>
+      </tr>
+
+
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</div>
+
+<div class="modal fade" id="addcourse" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="SignUpModal">Add Course</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <!--  -->
+
+          <div class="form-group">
+
+            <label>Course Title</label>
+
+            <input type="text" name="ctitle" id="ctitle" class="form-control" aria-describedby="emailHelp" placeholder="Enter a suitable course title">
+          </div>
+          <div class="form-group">
+
+            <label>Course Description</label>
+
+            <textarea rows="10" cols="6" name="cdesc" id="cdesc" class="form-control" aria-describedby="emailHelp"
+              placeholder="Enter Course Description"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Image</label>
+            <input type="file" name="thmb" id="thmb" class="form-control " id="imageUser1" placeholder="Enter">
+          </div>
+
+          <input hidden="true" id="pickachu" name="pickachu" value="1" />
+          <div class="modal-footer">
+            <button type="submit" onclick="courseAdd()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="topicdesc" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        Topic Description
+      </div>
+      <div class="modal-body" id="setcontent">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- modal for resources  -->
+<div class="modal fade" id="addresource" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title" id="SignUpModal">Add Resources</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'addR' %}" enctype="multipart/form-data">
+          <!--  -->
+          {% csrf_token %}
+
+
+          <div class="form-group dropdown show">
+            <label for=""> <strong>Select Resource type to add:</strong> </label>
+            <select name="rSelected" class="btn btn-secondary dropdown-toggle">
+              <option class="dropdown-item" value="P">Picture</option>
+              <option class="dropdown-item" value="V">Videos</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Resources</label>
+            <input type="file" name="myfile" class="form-control " id="imageUser2" placeholder="Enter">
+          </div>
+          <input type="number" hidden="true" name="orderid" value="{{ topOrdLen }}">
+
+          <input hidden="true" name="resId" value=1 />
+          <input hidden="true" name="Fkey" value="{{ topicID }}">
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="addresource2" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title" id="SignUpModal">Add Resources</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'addR' %}" enctype="multipart/form-data">
+          <!--  -->
+          {% csrf_token %}
+
+
+          <div class="form-group dropdown show">
+            <label for=""> <strong>Select Resource type to add:</strong> </label>
+            <select name="rSelected" class="btn btn-secondary dropdown-toggle">
+              <option class="dropdown-item" value="Q">Questions</option>
+              <option class="dropdown-item" value="T">Texts</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Resources</label>
+            <input type="text" name="title" id="1" placeholder="enter question/title">
+            <textarea rows="10" cols="6" name="summary" class="form-control" aria-describedby="emailHelp" placeholder="Enter Answer/decriptions"></textarea>
+
+          </div>
+          <input type="number" hidden="true" name="orderid" value="{{ topOrdLen }}">
+          <input name="resId" value=0 />
+          <input hidden="true" name="Fkey" value="{{ topicID }}">
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- modal for mcq resources -->
+
+<div class="modal fade" id="addresource3" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title" id="SignUpModal">Add Resources</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'addR' %}" enctype="multipart/form-data">
+          <!--  -->
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label>MCQ</label>
+            <input type="text" name="title" id="2" placeholder="enter question/title">
+            <input type="text" name="A" placeholder="Enter option A">
+            <input type="text" name="B" placeholder="Enter option B">
+            <input type="text" name="C" placeholder="Enter option C">
+            <input type="text" name="D" placeholder="Enter option D">
+          </div>
+
+          <div class="form-group dropdown show">
+            <label for=""> <strong>Select the correct option:</strong> </label>
+            <select name="rSelected" class="btn btn-secondary dropdown-toggle">
+              <option class="dropdown-item" value="A">A</option>
+              <option class="dropdown-item" value="B">B</option>
+              <option class="dropdown-item" value="A">C</option>
+              <option class="dropdown-item" value="B">D</option>
+            </select>
+          </div>
+
+          <input type="number" hidden="true" name="orderid" value="{{ topOrdLen }}">
+          <input name="resId" value=2 />
+          <input hidden="true" name="Fkey" value="{{ topicID }}">
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ended modal for resources -->
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+<script>
+  function knowtopics(id) {
+    var content = id;
+    var tcontent = `<table id="sort" class="grid table table-striped table-dark table-hover" title="Magic Table">
+    <thead>
+            <tr><th class="index" scope="col">Topic Title</th><th>Description</th></tr>
+    </thead>
+        <tbody>`;
+
+    $.getScript("{% static 'js/showGIF.js' %}", function () {
+      console.log("GIF working!");
+    });
+
+    console.log(content);
+    $.ajax({
+      url: "{% url 'top' %}",
+      data: {
+        'content': content
+      },
+      dataType: 'json',
+      success: function (response) {
+        $.each(response, function () {
+          console.log(response);
+          tcontent += `
+              <tr>
+                <td hidden="true" class="index" scope="row">  
+                </td>
+                <td  class="ord">
+                  ${this.fields.oid}
+                </td> 
+                <td>
+                  ${this.fields.title}
+                </td> 
+                <td>
+                  <button class="btn btn-success" onclick="capmodal(${this.pk})" data-toggle="modal" data-target="#topicdesc">View</button>
+                  <input id="${this.pk}" hidden="true" value="${this.fields.desc}" />
+                </td>
+                <td>
+                  <button class="btn btn-success" onclick="showcontent(${this.pk}, ${content})" type="submit">Know Content</button>
+                </td>
+                <td>
+                  <span class="navbar-toggler-icon"></span>
+                </td>
+              </tr>`;
+        });
+        tcontent += `</tbody></table>`;
+
+        $.get("{% static 'css/reorder.css' %}", function (css) {
+          $('<style type="text/css"></style>')
+            .html(css)
+            .appendTo("head");
+        });
+
+        $("#showtable").html(tcontent);
+
+        $.getScript("https://code.jquery.com/jquery-1.12.4.js", function () {
+          console.log("Script-1 loaded");
+          $.getScript("https://code.jquery.com/ui/1.12.1/jquery-ui.js", function () {
+            console.log("Script-2 loaded");
+            $.getScript("{% static 'js/reorder.js' %}", function () {
+              console.log("Script-3 loaded");
+            });
+          });
+        });
+        var buttons = `<button class="btn btn-success" onclick="showCourse()">Back to Courses</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-success" data-toggle="modal" data-target="#addcourse">Add Topic</button>&nbsp;&nbsp;&nbsp;&nbsp;<button id="reorder" class="btn btn-success">Re-Order</button><input type="text" hidden="true" name="setvalue" id="setvalue" value="initial value" /><input type="text" hidden="true" id="idcourse" value="${content}" />`;
+        $("#setbuttons").html(buttons);
+        $.getScript("{% static 'js/creator-reorder.js' %}", function () {
+          console.log("reorder working!");
+        });
+      }
+    });
+  } 
+</script>
+
+<script>
+
+  function courseAdd() {
+    var title = document.getElementById('ctitle').value;
+    var desc = document.getElementById('cdesc').value;
+    var cimage = document.getElementById('thmb').files[0];
+    var pickachu = document.getElementById('pickachu').value;
+    console.log(cimage);
+    formdata = new FormData();
+    formdata.append("image", cimage);
+    formdata.append("title", title);
+    formdata.append("desc", desc);
+    formdata.append("pickachu", pickachu);
+    console.log(formdata.getAll('image'));
+    console.log(formdata.getAll('title'));
+    console.log(formdata.getAll('desc'));
+    console.log(formdata.getAll('pickachu'));
+    //return false;
+    $.ajax({
+      url: "{% url 'addc' %}",
+      type: 'POST',
+      data: formdata,
+      dataType: 'text',
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        console.log(response);
+        $.getScript("/static/js/creator-reorder.js", function () {
+          console.log("reorder working!");
+          showCourse();
+        });
+        
+      }
+
+    });
+  }
+
+  function capmodal(id) {
+    var v = document.getElementById(String(id)).value;
+    document.getElementById('setcontent').innerHTML = v;
+  }
+
+</script>
+
+{% endblock %}
