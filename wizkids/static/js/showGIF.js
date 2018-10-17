@@ -7,7 +7,7 @@
       loader.style.display = "block";
       mytab.style.display = "none";
       mybut.style.display = "none";
-      setTimeout(hide, 7000);
+      setTimeout(hide, 4000);
     },
 
     hide = function(){
