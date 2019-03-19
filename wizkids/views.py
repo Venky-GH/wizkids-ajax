@@ -24,7 +24,7 @@ def home(request):
 			d[o.username][feed.summary] = o.image
 			i+=1
 
-	print(d)
+	#print(d)
 	curruser = None
 	if request.user.id:
 		curruser = request.user.id

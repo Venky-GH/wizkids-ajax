@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from .models import tokens
 from creator.models import course as crs,topic as tp,content
+from datetime import datetime
 # Create your views here.
 
 D = None
@@ -18,6 +19,16 @@ def course(request):
 	d['res'] = -1
 	chk['res'] = -1
 	for q in p:
+		#date difference done
+		somd = datetime.strftime(q.date, "%Y-%m-%d %H:%M:%S.%f")
+		new_dt = somd[:19]
+		date_format = "%Y-%m-%d"
+		a = datetime.strptime(str(datetime.now().date()), date_format)
+		b = datetime.strptime(new_dt, "%Y-%m-%d %H:%M:%S")
+		print(a, b)
+		diff = a - b
+		print(diff.days)
+		
 		if q.userid == request.user.id:
 			if q.check:
 				d['res'] = 1
